@@ -1,0 +1,12 @@
+services:
+    knp_rad_doctrine_event.event_listener.redispatcher_subscriber:
+        class: Knp\Rad\DoctrineEvent\EventListener\RedispatcherSubscriber
+        arguments:
+            - @event_dispatcher
+            - @knp_rad_doctrine_event.name.deducer.classname
+        tags:
+            - { name: doctrine.event_subscriber }
+            - { name: kernel.event_listener, event: kernel.terminate, method: onTerminate }
+
+    knp_rad_doctrine_event.name.deducer.classname:
+        class: Knp\Rad\DoctrineEvent\Name\Deducer\Classname
