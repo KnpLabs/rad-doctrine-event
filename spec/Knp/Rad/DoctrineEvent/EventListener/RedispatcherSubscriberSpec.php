@@ -30,7 +30,7 @@ class RedispatcherSubscriberSpec extends ObjectBehavior
         $deducer->deduce('App\\Entity\Model', 'pre_update')->willReturn('app.entity.model.pre_update');
         $deducer->deduce('App\\Entity\Model', 'post_persist_terminate')->willReturn('app.entity.model.post_persist_terminate');
 
-        $this->beConstructedWith($dispatcher, $deducer);
+        $this->beConstructedWith($dispatcher, $deducer, []);
     }
 
     function it_is_initializable()
@@ -41,6 +41,15 @@ class RedispatcherSubscriberSpec extends ObjectBehavior
     function it_dispatch_event($event, $dispatcher)
     {
         $dispatcher->dispatch('app.entity.model.post_persist', Argument::type('Knp\Rad\DoctrineEvent\Event\DoctrineEvent'))->shouldBeCalled();
+        $this->postPersist($event);
+    }
+
+    function it_doesnt_dispatch_event_if_filtered($event, $dispatcher, $deducer)
+    {
+        $this->beConstructedWith($dispatcher, $deducer, ['App\\Entity\\Model']);
+
+        $dispatcher->dispatch('app.entity.model.post_persist', Argument::type('Knp\Rad\DoctrineEvent\Event\DoctrineEvent'))->shouldNotBeCalled();
+
         $this->postPersist($event);
     }
 
@@ -59,7 +68,7 @@ class RedispatcherSubscriberSpec extends ObjectBehavior
         $this->onTerminate();
     }
 
-    function it__doesnt_dispatch_terminate_event_of_pre_events($event, $dispatcher)
+    function it_doesnt_dispatch_terminate_event_of_pre_events($event, $dispatcher)
     {
         $this->preUpdate($event);
 

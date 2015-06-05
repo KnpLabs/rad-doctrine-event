@@ -14,8 +14,13 @@ class DoctrineEventExtension extends Extension
      */
     public function load(array $config, ContainerBuilder $container)
     {
+        $configuration = new Configuration();
+        $config        = $this->processConfiguration($configuration, $config);
+
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        $container->setParameter('knp_rad_doctrine_event.entities', $config['entities']);
     }
 
     /**
