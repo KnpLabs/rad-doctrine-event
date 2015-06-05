@@ -8,18 +8,18 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 class DoctrineEvent extends GenericEvent
 {
     /**
-     * @var EventArgs $parent
+     * @var EventArgs
      */
     private $parent;
 
     /**
-     * @var array $changeSet
+     * @var array
      */
     private $changeSet;
 
     /**
-     * @param object $subject
-     * @param EventArgs $parent
+     * @param object     $subject
+     * @param EventArgs  $parent
      * @param array|null $arguments
      */
     public function __construct($subject, EventArgs $parent, array $arguments = array())
@@ -31,6 +31,7 @@ class DoctrineEvent extends GenericEvent
 
     /**
      * @see getSubject
+     *
      * @return object
      */
     public function getEntity()
@@ -59,7 +60,7 @@ class DoctrineEvent extends GenericEvent
     }
 
     /**
-     * Get the entire changeset (or just chengeset of an attribute if key is setted)
+     * Get the entire changeset (or just chengeset of an attribute if key is setted).
      *
      * @param string|null $key
      *
@@ -81,11 +82,9 @@ class DoctrineEvent extends GenericEvent
     }
 
     /**
-     * Merge changeset of the given event into the current one
+     * Merge changeset of the given event into the current one.
      *
      * @param DoctrineEvent $event
-     *
-     * @return null
      */
     public function merge(DoctrineEvent $event)
     {

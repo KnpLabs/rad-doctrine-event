@@ -12,28 +12,34 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class RedispatcherSubscriber implements EventSubscriber
 {
     /**
-     * @var EventDispatcherInterface $dispatcher
+     * @var EventDispatcherInterface
      */
     private $dispatcher;
 
     /**
-     * @var Deducer $deducer
+     * @var Deducer
      */
     private $deducer;
 
     /**
-     * @var array $cache
+     * @var string[]
+     */
+    private $entities;
+
+    /**
+     * @var array
      */
     private $cache;
 
     /**
      * @param EventDispatcherInterface $dispatcher
-     * @param Deducer $deducer
+     * @param Deducer                  $deducer
      */
-    public function __construct(EventDispatcherInterface $dispatcher, Deducer $deducer)
+    public function __construct(EventDispatcherInterface $dispatcher, Deducer $deducer, array $entities)
     {
         $this->dispatcher = $dispatcher;
         $this->deducer    = $deducer;
+        $this->entities   = $entities;
         $this->cache      = [];
     }
 
@@ -43,20 +49,18 @@ class RedispatcherSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
-            Events::preRemove => 'preRemove',
-            Events::postRemove => 'postRemove',
-            Events::preUpdate => 'preUpdate',
-            Events::postUpdate => 'postUpdate',
-            Events::prePersist => 'prePersist',
+            Events::preRemove   => 'preRemove',
+            Events::postRemove  => 'postRemove',
+            Events::preUpdate   => 'preUpdate',
+            Events::postUpdate  => 'postUpdate',
+            Events::prePersist  => 'prePersist',
             Events::postPersist => 'postPersist',
-            Events::postLoad => 'postLoad',
+            Events::postLoad    => 'postLoad',
         ];
     }
 
     /**
      * @param EventArgs $event
-     *
-     * @return null
      */
     public function preRemove(EventArgs $event)
     {
@@ -65,8 +69,6 @@ class RedispatcherSubscriber implements EventSubscriber
 
     /**
      * @param EventArgs $event
-     *
-     * @return null
      */
     public function postRemove(EventArgs $event)
     {
@@ -75,8 +77,6 @@ class RedispatcherSubscriber implements EventSubscriber
 
     /**
      * @param EventArgs $event
-     *
-     * @return null
      */
     public function preUpdate(EventArgs $event)
     {
@@ -85,8 +85,6 @@ class RedispatcherSubscriber implements EventSubscriber
 
     /**
      * @param EventArgs $event
-     *
-     * @return null
      */
     public function postUpdate(EventArgs $event)
     {
@@ -95,8 +93,6 @@ class RedispatcherSubscriber implements EventSubscriber
 
     /**
      * @param EventArgs $event
-     *
-     * @return null
      */
     public function prePersist(EventArgs $event)
     {
@@ -105,8 +101,6 @@ class RedispatcherSubscriber implements EventSubscriber
 
     /**
      * @param EventArgs $event
-     *
-     * @return null
      */
     public function postPersist(EventArgs $event)
     {
@@ -115,8 +109,6 @@ class RedispatcherSubscriber implements EventSubscriber
 
     /**
      * @param EventArgs $event
-     *
-     * @return null
      */
     public function postLoad(EventArgs $event)
     {
@@ -124,7 +116,6 @@ class RedispatcherSubscriber implements EventSubscriber
     }
 
     /**
-     * @return null
      */
     public function onTerminate()
     {
@@ -132,7 +123,7 @@ class RedispatcherSubscriber implements EventSubscriber
             foreach ($events as $event) {
                 $entity   = $event->getEntity();
                 $metadata = $this->getMetadata($entity, $event);
-                $classes  = array_merge([ $metadata->getName() ], $metadata->parentClasses );
+                $classes  = array_merge([ $metadata->getName() ], $metadata->parentClasses);
 
                 foreach (array_reverse($classes) as $class) {
                     $this->notify($class, sprintf('%s_terminate', $name), $event);
@@ -142,20 +133,23 @@ class RedispatcherSubscriber implements EventSubscriber
     }
 
     /**
-     * Description
+     * Description.
      *
      * @param EventArgs $event
-     * @param string $name
-     * @param boolean $onTerminate
-     *
-     * @return null
+     * @param string    $name
+     * @param boolean   $onTerminate
      */
     private function process($event, $name, $onTerminate)
     {
         $entity   = $event->getEntity();
+
+        if (false === $this->supportsEntity($entity)) {
+            return;
+        }
+
         $metadata = $this->getMetadata($entity, $event);
         $newEvent = new DoctrineEvent($entity, $event);
-        $classes  = array_merge([$metadata->getName()], $metadata->parentClasses );
+        $classes  = array_merge([$metadata->getName()], $metadata->parentClasses);
 
         if (true === $onTerminate) {
             $this->registerTerminate($entity, $newEvent, $name);
@@ -167,11 +161,9 @@ class RedispatcherSubscriber implements EventSubscriber
     }
 
     /**
-     * @param string $class
-     * @param string $name
+     * @param string        $class
+     * @param string        $name
      * @param DoctrineEvent $event
-     *
-     * @return null
      */
     private function notify($class, $name, DoctrineEvent $event)
     {
@@ -180,7 +172,7 @@ class RedispatcherSubscriber implements EventSubscriber
     }
 
     /**
-     * @param object $entity
+     * @param object                  $entity
      * @param EventArgs|DoctrineEvent $event
      *
      * @return \Doctrine\ORM\Mapping\ClassMetadataInfo
@@ -193,11 +185,9 @@ class RedispatcherSubscriber implements EventSubscriber
     }
 
     /**
-     * @param object $entity
+     * @param object        $entity
      * @param DoctrineEvent $terminate
-     * @param string $name
-     *
-     * @return null
+     * @param string        $name
      */
     private function registerTerminate($entity, DoctrineEvent $terminate, $name)
     {
@@ -209,5 +199,25 @@ class RedispatcherSubscriber implements EventSubscriber
 
         $terminate->getChangeSet();
         $this->cache[$name][spl_object_hash($entity)] = $terminate;
+    }
+
+    /**
+     * @param object $entity
+     *
+     * @return boolean
+     */
+    private function supportsEntity($entity)
+    {
+        if (true === empty($this->entities)) {
+            return true;
+        }
+
+        foreach ($this->entities as $class) {
+            if (true === $entity instanceof $class) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

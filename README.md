@@ -166,3 +166,15 @@ Each `post` (`posy_persist`, `post_update`, `post_remove`, `post_load`) event ar
 | app.entity.user.post_update  | app.entity.user.post_update_terminate  |
 | app.entity.user.post_remove  | app.entity.user.post_remove_terminate  |
 | app.entity.user.post_load    | app.entity.user.post_load_terminate    |
+
+#Configuration
+
+You can restrict event re-dispatching to specific entities.
+
+You just have to follow this configuration:
+
+```yml
+knp_rad_doctrine_event:
+    entities:
+        - MyBundle\Entity\User
+```
