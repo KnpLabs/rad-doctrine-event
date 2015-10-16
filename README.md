@@ -158,7 +158,7 @@ Each event raised after handling an entity is preceded by the same event of the 
 
 #Terminate
 
-Each `post` (`posy_persist`, `post_update`, `post_remove`, `post_load`) event are also redispatched during the `kernel.terminate` event.
+Each `post` (`post_persist`, `post_update`, `post_remove`, `post_load`) event is also redispatched during the `kernel.terminate` event.
 
 | Event                        | Terminate event                        |
 | ---------------------------- | -------------------------------------- |
