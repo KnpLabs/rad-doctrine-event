@@ -12,9 +12,9 @@
         "php": ">=5.4",
         "doctrine/inflector": "~1.0",
         "doctrine/orm": "~2.0",
-        "symfony/config": "~2.0",
-        "symfony/dependency-injection": "~2.0",
-        "symfony/http-kernel": "~2.0"
+        "symfony/config": "~3.0",
+        "symfony/dependency-injection": "~3.0",
+        "symfony/http-kernel": "~3.0"
     },
     "require-dev": {
         "phpspec/phpspec": "~2.1",
