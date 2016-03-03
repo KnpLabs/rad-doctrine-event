@@ -11,6 +11,8 @@ Access to your doctrine events from the Symfony DIC.
 composer require knplabs/rad-doctrine-event ~1.0@dev
 ```
 
+And with symfony:
+
 ```php
 class AppKernel
 {
@@ -33,6 +35,8 @@ class AppKernel
 
 ##Context
 
+Let's say you have the following entity:
+
 ```php
 namespace App\Entity;
 
@@ -49,6 +53,8 @@ class User
 ```
 
 ##Before
+
+In order to plug doctrine events for that entity, actually we do:
 
 ```php
 namespace App\EventListener;
@@ -82,6 +88,8 @@ services:
 
 ##After
 
+But with the **KnpRadDoctrineEvent** you will need:
+
 ```php
 namespace App\EventListener;
 
@@ -110,6 +118,8 @@ services:
 #Inheritance
 
 ##Context
+
+Let's say you have an entity extending an other entity:
 
 ```php
 namespace App\Entity;
@@ -147,14 +157,13 @@ class Customer extends User
 
 ##Events
 
-Each event raised after handling an entity is preceded by the same event of the parent entity.
+The parent entity events are dispatched just before the children entities:
 
-| Parent                      | Entity                          |
-| --------------------------- | ------------------------------- |
-| app.entity.user.pre_persist | app.entity.customer.pre_persist |
-| app.entity.user.post_update | app.entity.customer.post_update |
-| app.entity.user.post_load   | app.entity.customer.post_load   |
-| ...                         | ...                             |
+| For         | First event                 | Second Event                    |
+| ----------- | --------------------------- | ------------------------------- |
+| pre_persist | app.entity.user.pre_persist | app.entity.customer.pre_persist |
+| post_update | app.entity.user.pre_update  | app.entity.customer.pre_update  |
+| ...                                                                         |
 
 #Terminate
 
@@ -178,3 +187,5 @@ knp_rad_doctrine_event:
     entities:
         - MyBundle\Entity\User
 ```
+
+Then events will be dispatched only for the entity `MyBundle\Entity\User`.
