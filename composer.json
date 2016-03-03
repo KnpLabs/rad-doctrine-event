@@ -21,8 +21,8 @@
         "knplabs/phpspec-welldone-extension": "dev-master@dev"
     },
     "autoload": {
-        "psr-0": {
-            "Knp\\Rad\\DoctrineEvent": "src/"
+        "psr-4": {
+            "Knp\\Rad\\DoctrineEvent\\": "src/Knp/Rad/DoctrineEvent/"
         }
     },
     "config": {
