@@ -4,6 +4,7 @@ Access to your doctrine events from the Symfony DIC.
 
 [![Build Status](https://travis-ci.org/KnpLabs/rad-doctrine-event.svg?branch=master)](https://travis-ci.org/KnpLabs/rad-doctrine-event)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/KnpLabs/rad-doctrine-event/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/KnpLabs/rad-doctrine-event/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/knplabs/rad-doctrine-event/v/stable)](https://packagist.org/packages/knplabs/rad-doctrine-event) [![Total Downloads](https://poser.pugx.org/knplabs/rad-doctrine-event/downloads)](https://packagist.org/packages/knplabs/rad-doctrine-event) [![Latest Unstable Version](https://poser.pugx.org/knplabs/rad-doctrine-event/v/unstable)](https://packagist.org/packages/knplabs/rad-doctrine-event) [![License](https://poser.pugx.org/knplabs/rad-doctrine-event/license)](https://packagist.org/packages/knplabs/rad-doctrine-event)
 
 #Installation
 
