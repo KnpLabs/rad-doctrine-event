@@ -54,7 +54,7 @@ class User
 
 ##Before
 
-In order to plug doctrine events for that entity, actually we do:
+In order to plug doctrine events for that entity, we usualy do:
 
 ```php
 namespace App\EventListener;
@@ -119,7 +119,7 @@ services:
 
 ##Context
 
-Let's say you have an entity extending an other entity:
+Let's say you have an entity extending another entity:
 
 ```php
 namespace App\Entity;
