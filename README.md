@@ -54,7 +54,7 @@ class User
 
 ##Before
 
-In order to plug doctrine events for that entity, we usualy do:
+In order to plug doctrine events for that entity, we usually do:
 
 ```php
 namespace App\EventListener;
