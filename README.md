@@ -9,10 +9,10 @@ Access to your doctrine events from the Symfony DIC.
 #Installation
 
 ```bash
-composer require knplabs/rad-doctrine-event ~1.0@dev
+composer require knplabs/rad-doctrine-event ~2.1
 ```
 
-And with symfony:
+And with Symfony:
 
 ```php
 class AppKernel
