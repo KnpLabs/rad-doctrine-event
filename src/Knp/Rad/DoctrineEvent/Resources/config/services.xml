@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="knp_rad_doctrine_event.entities" type="collection"></parameter>
-    </parameter>
+    </parameters>
 
     <services>
         <service id="knp_rad_doctrine_event.event_listener.redispatcher_subscriber" class="Knp\Rad\DoctrineEvent\EventListener\RedispatcherSubscriber">
@@ -18,7 +18,7 @@
             <tag name="kernel.event_listener" event="kernel.terminate" method="onTerminate" />
         </service>
 
-        <service id="knp_rad_doctrine_event.name.deducer.classname" class="class: Knp\Rad\DoctrineEvent\Name\Deducer\Classname">
+        <service id="knp_rad_doctrine_event.name.deducer.classname" class="Knp\Rad\DoctrineEvent\Name\Deducer\Classname">
         </service>
     </services>
 
