@@ -6,7 +6,7 @@ Access to your doctrine events from the Symfony DIC.
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/KnpLabs/rad-doctrine-event/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/KnpLabs/rad-doctrine-event/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/knplabs/rad-doctrine-event/v/stable)](https://packagist.org/packages/knplabs/rad-doctrine-event) [![Total Downloads](https://poser.pugx.org/knplabs/rad-doctrine-event/downloads)](https://packagist.org/packages/knplabs/rad-doctrine-event) [![Latest Unstable Version](https://poser.pugx.org/knplabs/rad-doctrine-event/v/unstable)](https://packagist.org/packages/knplabs/rad-doctrine-event) [![License](https://poser.pugx.org/knplabs/rad-doctrine-event/license)](https://packagist.org/packages/knplabs/rad-doctrine-event)
 
-#Installation
+# Installation
 
 ```bash
 composer require knplabs/rad-doctrine-event ~2.1
@@ -32,9 +32,9 @@ class AppKernel
 }
 ```
 
-#Usages
+# Use
 
-##Context
+## Context
 
 Let's say you have the following entity:
 
@@ -53,7 +53,7 @@ class User
 }
 ```
 
-##Before
+## Before
 
 In order to plug doctrine events for that entity, we usually do:
 
@@ -87,7 +87,7 @@ services:
             - { name: doctrine.event_listener, event: pre_persist, method: prePersist }
 ```
 
-##After
+## After
 
 But with the **KnpRadDoctrineEvent** you will need:
 
@@ -116,9 +116,9 @@ services:
             - { name: kernel.event_listener, event: app.entity.user.pre_persist, method: prePersist }
 ```
 
-#Inheritance
+# Inheritance
 
-##Context
+## Context
 
 Let's say you have an entity extending another entity:
 
@@ -156,7 +156,7 @@ class Customer extends User
 }
 ```
 
-##Events
+## Events
 
 The parent entity events are dispatched just before the children entities:
 
@@ -166,7 +166,7 @@ The parent entity events are dispatched just before the children entities:
 | post_update | app.entity.user.pre_update  | app.entity.customer.pre_update  |
 | ...                                                                         |
 
-#Terminate
+# Terminate
 
 Each `post` (`post_persist`, `post_update`, `post_remove`, `post_load`) event is also redispatched during the `kernel.terminate` event.
 
@@ -177,7 +177,7 @@ Each `post` (`post_persist`, `post_update`, `post_remove`, `post_load`) event is
 | app.entity.user.post_remove  | app.entity.user.post_remove_terminate  |
 | app.entity.user.post_load    | app.entity.user.post_load_terminate    |
 
-#Configuration
+# Configuration
 
 You can restrict event re-dispatching to specific entities.
 
